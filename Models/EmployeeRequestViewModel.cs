@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using dotnetapi.Enums;
 
 namespace dotnetapi.Models;
 
 public class EmployeeRequestViewModel
 {
+    [Key]
     public int Id { get; set; }
     public string Name { get; set; }
     public string Surname { get; set; }
