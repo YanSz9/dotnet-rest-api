@@ -13,15 +13,24 @@ public class EmployeeController : ControllerBase
     {
         _employeeService = employeeService;
     }
-    [HttpGet]
+    [HttpGet("get-all-user")]
     public async Task<ActionResult<ResponseViewModel<List<EmployeeRequestViewModel>>>> GetEmployees()
     {
         return Ok(await _employeeService.GetEmployees());
     }
-    [HttpPost]
+
+    [HttpGet("get-single-user/{id}")]
+    public async Task<ActionResult<ResponseViewModel<EmployeeRequestViewModel>>> GetEmployeeById(int id)
+    {
+        ResponseViewModel<EmployeeRequestViewModel> responseViewModel = await _employeeService.GetEmployeeById(id);
+
+        return Ok(responseViewModel);
+    }
+    [HttpPost("create-user")]
     public async Task<ActionResult<ResponseViewModel<List<EmployeeRequestViewModel>>>> CreateEmployee(EmployeeRequestViewModel newEmployee)
     {
         return Ok(await _employeeService.CreateEmployee(newEmployee));
     }
+
 
 }

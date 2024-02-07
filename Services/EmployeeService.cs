@@ -46,9 +46,28 @@ public class EmployeeService : IEmployeeService
         throw new NotImplementedException();
     }
 
-    public Task<ResponseViewModel<EmployeeRequestViewModel>> GetEmployeeById(int id)
+    public async Task<ResponseViewModel<EmployeeRequestViewModel>> GetEmployeeById(int id)
     {
-        throw new NotImplementedException();
+        ResponseViewModel<EmployeeRequestViewModel> responseViewModel = new ResponseViewModel<EmployeeRequestViewModel>();
+
+        try
+        {
+            EmployeeRequestViewModel employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id);
+            if (employee == null)
+            {
+                responseViewModel.Data = null;
+                responseViewModel.Message = "User not found";
+                responseViewModel.Sucess = false;
+            }
+            responseViewModel.Data = employee;
+
+        }
+        catch (Exception ex)
+        {
+            responseViewModel.Message = ex.Message;
+            responseViewModel.Sucess = false;
+        }
+        return responseViewModel;
     }
 
     public async Task<ResponseViewModel<List<EmployeeRequestViewModel>>> GetEmployees()
