@@ -120,8 +120,34 @@ public class EmployeeService : IEmployeeService
         return responseViewModel;
     }
 
-    public Task<ResponseViewModel<List<EmployeeRequestViewModel>>> UpdateEmployee(EmployeeRequestViewModel updatedEmployee)
+    public async Task<ResponseViewModel<List<EmployeeRequestViewModel>>> UpdateEmployee(EmployeeRequestViewModel updatedEmployee)
     {
-        throw new NotImplementedException();
+        ResponseViewModel<List<EmployeeRequestViewModel>> responseViewModel = new ResponseViewModel<List<EmployeeRequestViewModel>>();
+        try
+        {
+            EmployeeRequestViewModel employee = await _context.Employees.AsNoTracking().FirstOrDefaultAsync(x => x.Id == updatedEmployee.Id);
+
+            if (employee == null)
+            {
+                responseViewModel.Data = null;
+                responseViewModel.Message = "User Not Found";
+                responseViewModel.Sucess = false;
+            }
+
+            employee.UpdatedAt = DateTime.Now.ToLocalTime();
+
+            _context.Employees.Update(updatedEmployee);
+            await _context.SaveChangesAsync();
+
+            responseViewModel.Data = _context.Employees.ToList();
+
+        }
+        catch (Exception ex)
+        {
+            responseViewModel.Message = ex.Message;
+            responseViewModel.Sucess = false;
+        }
+        return responseViewModel;
+
     }
 }
