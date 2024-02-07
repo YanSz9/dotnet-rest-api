@@ -31,6 +31,12 @@ public class EmployeeController : ControllerBase
     {
         return Ok(await _employeeService.CreateEmployee(newEmployee));
     }
+    [HttpPut("inactive-employee")]
+    public async Task<ActionResult<ResponseViewModel<List<EmployeeRequestViewModel>>>> InactiveEmployee(int id)
+    {
+        ResponseViewModel<List<EmployeeRequestViewModel>> responseViewModel = await _employeeService.InactiveEmployee(id);
+        return Ok(responseViewModel);
+    }
 
 
 }
