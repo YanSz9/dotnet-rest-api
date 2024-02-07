@@ -18,4 +18,10 @@ public class EmployeeController : ControllerBase
     {
         return Ok(await _employeeService.GetEmployees());
     }
+    [HttpPost]
+    public async Task<ActionResult<ResponseViewModel<List<EmployeeRequestViewModel>>>> CreateEmployee(EmployeeRequestViewModel newEmployee)
+    {
+        return Ok(await _employeeService.CreateEmployee(newEmployee));
+    }
+
 }

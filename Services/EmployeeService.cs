@@ -12,9 +12,33 @@ public class EmployeeService : IEmployeeService
     {
         _context = context;
     }
-    public Task<ResponseViewModel<List<EmployeeRequestViewModel>>> CreateEmployee(EmployeeRequestViewModel newEmployee)
+    public async Task<ResponseViewModel<List<EmployeeRequestViewModel>>> CreateEmployee(EmployeeRequestViewModel newEmployee)
     {
-        throw new NotImplementedException();
+        ResponseViewModel<List<EmployeeRequestViewModel>> responseViewModel = new ResponseViewModel<List<EmployeeRequestViewModel>>();
+
+        try
+        {
+            if (newEmployee == null)
+            {
+                responseViewModel.Data = null;
+                responseViewModel.Message = "Report data!";
+                responseViewModel.Sucess = false;
+
+                return responseViewModel;
+            }
+
+            _context.Add(newEmployee);
+            await _context.SaveChangesAsync();
+
+            responseViewModel.Data = _context.Employees.ToList();
+        }
+        catch (Exception ex)
+        {
+
+            responseViewModel.Message = ex.Message;
+            responseViewModel.Sucess = false;
+        }
+        return responseViewModel;
     }
 
     public Task<ResponseViewModel<List<EmployeeRequestViewModel>>> DeleteEmployee(int id)
@@ -46,8 +70,6 @@ public class EmployeeService : IEmployeeService
         }
         return responseViewModel;
     }
-
-
 
     public Task<ResponseViewModel<List<EmployeeRequestViewModel>>> InactiveEmployee(int id)
     {
