@@ -45,6 +45,12 @@ public class EmployeeController : ControllerBase
         ResponseViewModel<List<EmployeeRequestViewModel>> responseViewModel = await _employeeService.InactiveEmployee(id);
         return Ok(responseViewModel);
     }
+    [HttpDelete("delete-employee")]
+    public async Task<ActionResult<ResponseViewModel<List<EmployeeRequestViewModel>>>> DeleteEmployee(int id)
+    {
+        ResponseViewModel<List<EmployeeRequestViewModel>> responseViewModel = await _employeeService.DeleteEmployee(id);
+        return Ok(responseViewModel);
+    }
 
 
 }

@@ -41,9 +41,34 @@ public class EmployeeService : IEmployeeService
         return responseViewModel;
     }
 
-    public Task<ResponseViewModel<List<EmployeeRequestViewModel>>> DeleteEmployee(int id)
+    public async Task<ResponseViewModel<List<EmployeeRequestViewModel>>> DeleteEmployee(int id)
     {
-        throw new NotImplementedException();
+        ResponseViewModel<List<EmployeeRequestViewModel>> responseViewModel = new ResponseViewModel<List<EmployeeRequestViewModel>>();
+
+        try
+        {
+            EmployeeRequestViewModel employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (employee == null)
+            {
+                responseViewModel.Data = null;
+                responseViewModel.Message = "User Not Found";
+                responseViewModel.Sucess = false;
+
+                return responseViewModel;
+            }
+
+            _context.Employees.Remove(employee);
+            await _context.SaveChangesAsync();
+
+            responseViewModel.Data = _context.Employees.ToList();
+        }
+        catch (Exception ex)
+        {
+            responseViewModel.Message = ex.Message;
+            responseViewModel.Sucess = false;
+        }
+        return responseViewModel;
     }
 
     public async Task<ResponseViewModel<EmployeeRequestViewModel>> GetEmployeeById(int id)
