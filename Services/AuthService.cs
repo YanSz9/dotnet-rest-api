@@ -10,9 +10,11 @@ using Microsoft.EntityFrameworkCore;
 public class AuthService : IAuthService
 {
     private readonly ApplicationDbContext _context;
-    public AuthService(ApplicationDbContext context)
+    private readonly IPasswordService _passwordService;
+    public AuthService(ApplicationDbContext context, IPasswordService passwordService)
     {
         _context = context;
+        _passwordService = passwordService;
     }
     public async Task<ResponseViewModel<UserResponseViewModel>> Register(UserResponseViewModel userRegister)
     {
@@ -26,7 +28,22 @@ public class AuthService : IAuthService
                 responseViewModel.Message = "Email/User already exists";
                 return responseViewModel;
             }
+            _passwordService.CreateHashPassword(userRegister.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            UserViewModel user = new UserViewModel()
+            {
+                User = userRegister.User,
+                Email = userRegister.Email,
+                Role = userRegister.Role,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+
+            responseViewModel.Message = "User created successfully!";
         }
+
         catch (Exception ex)
         {
 
