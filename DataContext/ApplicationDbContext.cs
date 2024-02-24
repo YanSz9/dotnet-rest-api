@@ -11,4 +11,5 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<EmployeeRequestViewModel> Employees { get; set; }
+    public DbSet<UserViewModel> Users { get; set; }
 }
