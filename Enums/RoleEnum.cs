@@ -1,5 +1,7 @@
-namespace dotnetapi.Enums;
+using System.Text.Json.Serialization;
 
+namespace dotnetapi.Enums;
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum RoleEnum
 {
     Operational = 1,
