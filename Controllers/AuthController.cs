@@ -14,7 +14,15 @@ public class AuthController : ControllerBase
     {
         _authService = authService;
     }
-    [HttpPost]
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(UserLoginViewModel userLogin)
+    {
+        var response = await _authService.Login(userLogin);
+        return Ok(response);
+    }
+
+    [HttpPost("register")]
     public async Task<IActionResult> Register(UserResponseViewModel userRegister)
     {
         var response = await _authService.Register(userRegister);
