@@ -23,7 +23,7 @@ public class AuthService : IAuthService
             {
                 responseViewModel.Data = null;
                 responseViewModel.Sucess = false;
-                responseViewModel.Message = "Email/Usuário already exists";
+                responseViewModel.Message = "Email/User already exists";
                 return responseViewModel;
             }
         }
